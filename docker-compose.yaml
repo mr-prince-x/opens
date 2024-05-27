@@ -1,0 +1,43 @@
+version: "3"
+services:
+  springboot-app:
+    container_name: springboot-app
+    image: backend-ok
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysqldb
+    networks:
+      - app-network
+
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: elearningsystem
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - mysqldb-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  angular-app:
+    container_name: angular-app
+    image: test
+    build: .
+    ports:
+      - "4200:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysqldb-data:
+
